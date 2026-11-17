@@ -1,0 +1,741 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kosmos di Filolao (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Jost:wght@300;400;500&display=swap">
+<style>
+/* Layout: canvas 3D a tutto schermo; testata in alto, scheda del corpo a destra (in basso su telefono), dock tempo+corpi in basso */
+:root{
+  --void:#08070c;
+  --ink:#ece2cc;
+  --ink-dim:#a3977f;
+  --fire:#ff8a3d;
+  --fire-deep:#c2401a;
+  --panel:rgba(18,14,22,.8);
+  --line:rgba(236,226,204,.15);
+  --f-display:"GFS Didot","Didot","Bodoni 72",Georgia,serif;
+  --f-ui:"Jost","Avenir Next","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--void);color:var(--ink);font-family:var(--f-ui)}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.head{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:calc(env(safe-area-inset-left,0px) + 16px);right:calc(env(safe-area-inset-right,0px) + 16px);display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;pointer-events:none}
+.brand{display:flex;gap:12px;align-items:center}
+.brand svg{width:38px;height:34px;flex:none;color:var(--fire)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(22px,3vw,30px);line-height:1.05;margin:0;text-wrap:balance}
+.brand p{margin:3px 0 0;font:300 12px/1.4 var(--f-ui);color:var(--ink-dim);letter-spacing:.03em;max-width:42ch}
+.tools{display:flex;flex-wrap:wrap;gap:6px;pointer-events:auto}
+button{font:400 13px/1 var(--f-ui);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+button:hover:not(:disabled){border-color:rgba(255,138,61,.55)}
+button[aria-pressed="true"]{border-color:var(--fire);background:rgba(194,64,26,.38)}
+button:disabled{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--fire);outline-offset:2px}
+.dock{position:fixed;left:0;right:0;bottom:0;padding-top:28px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:10px;background:linear-gradient(to top,rgba(8,7,12,.94) 40%,rgba(8,7,12,0));pointer-events:none}
+.chips{display:flex;gap:6px;overflow-x:auto;pointer-events:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:4px;border-radius:10px;padding:8px 11px}
+.chip .g{font:16px/1 var(--f-display)}
+.chip .i{font:400 10px/1 var(--f-ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-dim)}
+.time{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;pointer-events:auto;font:300 12px/1.3 var(--f-ui);color:var(--ink-dim)}
+.time label{letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+input[type=range]{accent-color:var(--fire);width:min(220px,38vw)}
+.num{font-variant-numeric:tabular-nums;color:var(--ink)}
+.hint{margin-left:auto}
+.info{position:fixed;right:calc(env(safe-area-inset-right,0px) + 16px);top:calc(env(safe-area-inset-top,0px) + 84px);width:min(340px,calc(100vw - 32px));max-height:calc(100% - 270px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.info .gr{font:400 30px/1.05 var(--f-display);color:var(--fire);margin:0 34px 4px 0}
+.info h2{font:500 11px/1.2 var(--f-ui);letter-spacing:.14em;text-transform:uppercase;margin:0}
+.info .epi{font:italic 400 15px/1.3 var(--f-display);color:var(--ink-dim);margin:6px 0 12px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px;padding:10px 0;border-block:1px solid var(--line)}
+.facts dt{font:400 9.5px/1 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:5px}
+.facts dd{margin:0;font:400 13px/1.25 var(--f-ui);font-variant-numeric:tabular-nums}
+.info p.txt{font:300 14px/1.55 var(--f-ui);margin:0;max-width:62ch}
+.seg{display:flex;padding:3px;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:999px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.seg button{border:0;background:transparent;padding:7px 14px;-webkit-backdrop-filter:none;backdrop-filter:none}
+.seg button[aria-pressed="true"]{background:var(--fire-deep);color:#fff4e6}
+.cmp{display:grid;grid-template-columns:auto 1fr 1fr;gap:7px 12px;margin:0 0 12px;padding:10px 0;border-block:1px solid var(--line);font:400 13px/1.25 var(--f-ui);font-variant-numeric:tabular-nums}
+.cmp .hd{font:500 9.5px/1 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);padding-bottom:2px}
+.cmp .rl{font:400 9.5px/1.4 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);padding-top:2px}
+.cmp .on{color:var(--fire)}
+.cmp .off{color:var(--ink-dim)}
+.info .note{font:300 12px/1.4 var(--f-ui);color:var(--ink-dim);margin:10px 0 0}
+.chip.gone .i{text-decoration:line-through}
+.chip.gone{opacity:.55}
+.info .x{position:absolute;top:12px;right:12px;width:30px;height:30px;padding:0;font-size:18px;line-height:28px}
+@media (max-width:640px){
+  .info{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 128px);left:calc(env(safe-area-inset-left,0px) + 16px);width:auto;max-height:38vh;padding:14px 16px}
+  .info .gr{font-size:24px}
+  .hint{display:none}
+  button{padding:8px 12px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<canvas id="c" aria-label="Modello 3D navigabile del cosmo di Filolao"></canvas>
+
+<header class="head">
+  <div class="brand">
+    <svg viewBox="0 0 40 36" role="img" aria-label="Tetractys: 1 + 2 + 3 + 4 = 10">
+      <g fill="currentColor"><circle cx="20" cy="5" r="2.6"/><circle cx="16" cy="13" r="2.6"/><circle cx="24" cy="13" r="2.6"/><circle cx="12" cy="21" r="2.6"/><circle cx="20" cy="21" r="2.6"/><circle cx="28" cy="21" r="2.6"/><circle cx="8" cy="29" r="2.6"/><circle cx="16" cy="29" r="2.6"/><circle cx="24" cy="29" r="2.6"/><circle cx="32" cy="29" r="2.6"/></g>
+    </svg>
+    <div>
+      <h1 id="ttl">Kosmos di Filolao</h1>
+      <p id="sub">Il cosmo pitagorico del V secolo a.C. Dieci corpi divini attorno a un fuoco, come i dieci punti della tetractys.</p>
+    </div>
+  </div>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Modello da mostrare">
+      <button id="mF" type="button" aria-pressed="true">Filolao</button>
+      <button id="mR" type="button" aria-pressed="false">Oggi</button>
+    </div>
+    <button id="view" type="button" aria-pressed="false">Vista dall'Ellade</button>
+    <button id="harm" type="button" aria-pressed="false">Armonia delle sfere</button>
+    <button id="lbl" type="button" aria-pressed="true">Etichette</button>
+    <button id="vr" type="button" disabled>Verifico VR…</button>
+  </div>
+</header>
+
+<section id="info" class="info" hidden aria-live="polite">
+  <button class="x" id="infoClose" type="button" aria-label="Chiudi scheda">×</button>
+  <p class="gr" id="iGr"></p>
+  <h2 id="iIt"></h2>
+  <p class="epi" id="iEpi"></p>
+  <div class="cmp" role="table" aria-label="Confronto tra il modello di Filolao e oggi">
+    <div role="columnheader"></div><div class="hd" id="hF" role="columnheader">Filolao</div><div class="hd" id="hR" role="columnheader">Oggi</div>
+    <div class="rl" role="rowheader">Posizione</div><div id="cOrdF"></div><div id="cOrdR"></div>
+    <div class="rl" role="rowheader">Gira attorno a</div><div id="cAroF"></div><div id="cAroR"></div>
+    <div class="rl" role="rowheader">Un giro</div><div id="cPerF"></div><div id="cPerR"></div>
+  </div>
+  <p class="txt" id="iText"></p>
+  <p class="note" id="iNote"></p>
+</section>
+
+<div class="dock">
+  <div class="chips" id="chips" role="toolbar" aria-label="Corpi celesti"></div>
+  <div class="time">
+    <button id="play" type="button">Pausa</button>
+    <label for="speed">Velocità</label>
+    <input id="speed" type="range" min="0" max="1000" value="413">
+    <span class="num" id="speedOut"></span>
+    <span class="num" id="clock"></span>
+    <span class="hint" id="hint">Trascina per ruotare · rotella o pizzico per lo zoom · tocca un corpo</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const TAU = Math.PI * 2;
+
+/* ---------- Dati: l'ordine di Filolao (Aezio II.7.7) ---------- */
+const BASE_HZ = 98; // Sol2: scala pitagorica per quinte
+const BODIES = [
+  {id:'fire', gr:'Ἑστία', it:'Fuoco centrale', epi:'Il focolare dell’universo', r:0, size:1.25, period:0, ratio:[1,2], note:'Sol, ottava sotto', ord:'Centro',
+   text:'Al centro del cosmo non c’è la Terra ma un fuoco. Le fonti antiche lo chiamano focolare dell’universo, casa di Zeus, madre degli dèi, misura della natura. Dalla Terra non si vede mai: la parte abitata guarda sempre verso l’esterno.'},
+  {id:'anti', gr:'Ἀντίχθων', it:'Antiterra', epi:'La contro-terra', r:2.6, size:.32, period:1, phase:Math.PI, color:0x4d4258, ratio:[1,1], note:'Sol · 1/1', ord:'1°',
+   text:'Il decimo corpo. Gira attorno al fuoco in un giorno come la Terra, ma resta sempre nascosto. Aristotele accusò i pitagorici di averlo inventato per arrivare a dieci, il numero perfetto della tetractys; altri lo usavano per spiegare la frequenza delle eclissi di Luna. Le fonti non dicono con certezza dove si trovi: qui sta dalla parte opposta del fuoco.'},
+  {id:'earth', gr:'Γῆ', it:'Terra', epi:'Un pianeta tra gli altri', r:4, size:.45, period:1, phase:0, ratio:[9,8], note:'La · 9/8', ord:'2°',
+   text:'Per la prima volta la Terra lascia il centro. Fa un giro attorno al fuoco ogni giorno, sempre con l’Ellade (il punto chiaro) rivolta verso l’esterno: è questa corsa, non il moto del cielo, a produrre il giorno e la notte. Prova la vista dall’Ellade.'},
+  {id:'moon', gr:'Σελήνη', it:'Luna', epi:'Abitata, secondo Filolao', r:5.6, size:.2, period:29.53, phase:1.2, color:0xcfc7b8, ratio:[81,64], note:'Si · 81/64', ord:'3°',
+   text:'Un giro attorno al fuoco in circa un mese. Filolao la immaginava popolata da piante e animali più grandi e più belli dei nostri, quindici volte più forti, perché il giorno lunare dura molto più del nostro.'},
+  {id:'sun', gr:'Ἥλιος', it:'Sole', epi:'Una lente di vetro', r:8, size:.85, period:365.25, phase:2.4, color:0xffe1a0, ratio:[4,3], note:'Do · 4/3', ord:'4°',
+   text:'Il Sole non brilla di luce propria: è un corpo vitreo che raccoglie la luce del fuoco e la filtra fino a noi. Nel modello è anche una seconda sorgente di luce: quando l’Ellade gli sta di fronte, sulla Terra è giorno. Un giro all’anno.'},
+  {id:'mercury', gr:'Στίλβων', it:'Mercurio', epi:'Lo scintillante', r:10.5, size:.17, period:365.25, phase:2.95, color:0xb9a993, ratio:[3,2], note:'Re · 3/2', ord:'5°',
+   text:'Insieme a Venere accompagna il Sole: nel cosmo antico i tre corpi compiono il giro nello stesso tempo, un anno. Il nome viene dal bagliore intermittente con cui appare basso sull’orizzonte.'},
+  {id:'venus', gr:'Φωσφόρος', it:'Venere', epi:'Portatrice di luce', r:12.5, size:.27, period:365.25, phase:1.85, color:0xf2e2bd, ratio:[27,16], note:'Mi · 27/16', ord:'6°',
+   text:'Stella del mattino e stella della sera. La tradizione attribuisce a Pitagora (o a Parmenide) la scoperta che Fosforo ed Espero sono lo stesso astro. Anche lei gira in un anno, al passo con il Sole.'},
+  {id:'mars', gr:'Πυρόεις', it:'Marte', epi:'L’infuocato', r:15.5, size:.22, period:686.98, phase:4.0, color:0xc0552f, ratio:[243,128], note:'Fa# · 243/128', ord:'7°',
+   text:'Il pianeta rosso, legato al fuoco anche nel nome. Circa 687 giorni per un giro completo.'},
+  {id:'jupiter', gr:'Φαέθων', it:'Giove', epi:'Lo splendente', r:19, size:.5, period:4332.6, phase:5.2, color:0xd8b98a, ratio:[2,1], note:'Sol · 2/1', ord:'8°',
+   text:'Quasi dodici anni per un giro: nel modello avanza di circa un dodicesimo dell’orbita ogni anno. Con lui la scala arriva all’ottava, il rapporto 2/1.'},
+  {id:'saturn', gr:'Φαίνων', it:'Saturno', epi:'Colui che appare', r:23, size:.42, period:10759, phase:.8, color:0xc9b27a, ratio:[9,4], note:'La · 9/4', ord:'9°',
+   text:'Il più lento e il più lontano dei pianeti visibili a occhio nudo: quasi trent’anni per un giro. Niente anelli: nessuno li avrebbe visti per altri duemila anni.'},
+  {id:'stars', gr:'Ἀπλανεῖς', it:'Stelle fisse', epi:'Le non erranti', r:30, period:0, ratio:[81,32], note:'Si · 81/32', ord:'10°',
+   text:'La sfera delle stelle fisse. Qui è ferma: la rotazione del cielo notturno che vediamo dalla Terra nasce dalla corsa quotidiana della Terra attorno al fuoco. Con lei i corpi in moto diventano dieci.'},
+  {id:'outer', gr:'Ὄλυμπος', it:'Fuoco esterno', epi:'Il confine del tutto', r:37, period:0, ord:'Confine', note:'—',
+   text:'Filolao divide il tutto in tre regioni. L’Olimpo, il fuoco periferico, dove gli elementi sono puri. Il Kosmos, dall’Olimpo fino alla Luna, dove tutto si muove con ordine. L’Ouranos, sotto la Luna, dove le cose nascono e muoiono.'}
+];
+const byId = Object.fromEntries(BODIES.map(b=>[b.id,b]));
+
+/* ---------- Dati: il Sistema solare com'è davvero ----------
+   rR: distanza nella scena = 9·√UA (compressa); sR: raggio ingrandito; P: periodo siderale (giorni);
+   L0: longitudine media eclittica a J2000 (gradi), per mettere i pianeti dove sono oggi. */
+const REAL = {
+  fire:{gone:true, ord:'non esiste', aro:'—', per:'—', sub:'non esiste',
+    text:'Al centro del Sistema solare c’è il Sole, non un fuoco invisibile. Ma l’idea di Filolao conteneva un’intuizione enorme: la Terra non sta al centro e si muove. Copernico, nella dedica del De revolutionibus (1543), cita proprio Filolao tra gli antichi che avevano fatto muovere la Terra.'},
+  anti:{gone:true, ord:'non esiste', aro:'—', per:'—', sub:'non esiste',
+    text:'Non esiste. Le eclissi di Luna sono l’ombra della Terra stessa, e il cielo ci passa sopra perché la Terra ruota. Dietro il Sole non c’è nessun pianeta gemello: le sonde che osservano il Sistema solare da altre posizioni lo avrebbero visto da tempo.'},
+  earth:{rR:9, sR:.45, P:365.256, L0:100.464, ord:'3° dal Sole', aro:'Sole', per:'365,26 giorni', sub:'1 UA dal Sole',
+    text:'La Terra gira attorno al Sole in un anno e ruota su sé stessa in 23 ore e 56 minuti, con l’asse inclinato di 23,4°. Il giorno e la notte nascono da questa rotazione, non da un giro attorno a un fuoco. Filolao però aveva capito la cosa più difficile da accettare: è la Terra a muoversi, non il cielo.'},
+  moon:{rR:1.2, sR:.23, P:27.3217, L0:218.316, ord:'satellite della Terra', aro:'Terra', per:'27,3 giorni', sub:'384.400 km dalla Terra',
+    text:'La Luna gira attorno alla Terra, a circa 384.400 km, in 27,3 giorni (29,5 da una Luna nuova all’altra: il mese che misuravano gli antichi). Non è abitata e non ha atmosfera. Su un punto Filolao aveva ragione: il giorno lunare dura davvero circa un mese, perché la Luna mostra alla Terra sempre la stessa faccia.'},
+  sun:{rR:0, sR:2.2, P:0, ord:'centro', aro:'— (è il centro)', per:'—', sub:'una stella',
+    text:'Il Sole è una stella: una sfera di plasma che produce luce propria con la fusione nucleare e contiene il 99,8% della massa del Sistema solare. È lui il vero fuoco centrale. I pitagorici avevano messo un fuoco al posto giusto, e il Sole al posto sbagliato.'},
+  mercury:{rR:5.6, sR:.28, P:87.969, L0:252.251, ord:'1° dal Sole', aro:'Sole', per:'88 giorni', sub:'0,39 UA',
+    text:'Il pianeta più vicino al Sole: un giro in 88 giorni, non in un anno. Dalla Terra sembra accompagnare il Sole perché la sua orbita è interna alla nostra: non se ne allontana mai più di 28° circa. Per questo gli antichi gli davano lo stesso periodo del Sole.'},
+  venus:{rR:7.65, sR:.44, P:224.701, L0:181.98, ord:'2° dal Sole', aro:'Sole', per:'224,7 giorni', sub:'0,72 UA',
+    text:'Un giro in 225 giorni, su un’orbita interna a quella della Terra: per questo non si allontana mai più di 47° dal Sole e la vediamo solo al mattino o alla sera. Nel cosmo reale sta più vicina al Sole della Terra, non oltre. È il pianeta più caldo, sotto nubi di acido solforico.'},
+  mars:{rR:11.11, sR:.33, P:686.98, L0:355.453, ord:'4° dal Sole', aro:'Sole', per:'687 giorni', sub:'1,52 UA',
+    text:'Il periodo è lo stesso nei due modelli: gli astronomi antichi sapevano bene quanto ci mette Marte a tornare tra le stesse stelle, quasi due anni. Il rosso viene dall’ossido di ferro della superficie. A volte sembra tornare indietro nel cielo: è l’effetto della Terra che lo sorpassa.'},
+  jupiter:{rR:20.53, sR:1.5, P:4332.59, L0:34.404, ord:'5° dal Sole', aro:'Sole', per:'11,86 anni', sub:'5,2 UA',
+    text:'Il pianeta più grande: ci entrerebbero più di 1.300 Terre. Un giro in quasi 12 anni, come sapevano già gli antichi. Ha decine di lune; le quattro maggiori le scoprì Galileo nel 1610, e furono la prima prova che non tutto gira attorno alla Terra.'},
+  saturn:{rR:27.79, sR:1.38, P:10759.22, L0:49.944, ord:'6° dal Sole', aro:'Sole', per:'29,46 anni', sub:'9,5 UA',
+    text:'Quasi trent’anni per un giro. Gli anelli di ghiaccio e roccia li intravide Galileo nel 1610 e li descrisse Huygens nel 1655. Oltre Saturno ci sono altri due pianeti, Urano e Nettuno, invisibili a occhio nudo: nessun modello antico poteva conoscerli.'},
+  stars:{ord:'a anni luce da noi', aro:'centro della Via Lattea', per:'centinaia di milioni di anni', sub:'soli lontanissimi',
+    text:'Non c’è nessuna sfera: le stelle sono soli lontanissimi, sparsi a distanze diverse. La più vicina, Proxima Centauri, è a 4,2 anni luce. Se la distanza Terra–Sole fosse di un metro, Proxima starebbe a 268 km.'},
+  outer:{gone:true, ord:'non esiste', aro:'—', per:'—', sub:'non esiste',
+    text:'Non esiste un confine di fuoco. L’universo osservabile ha un raggio di circa 46 miliardi di anni luce e non sappiamo se abbia un limite. La luce più lontana che vediamo è la radiazione cosmica di fondo, il calore rimasto dal Big Bang: in un certo senso, un fuoco esterno c’è davvero.'}
+};
+BODIES.forEach(b=>{ b.real = REAL[b.id]; });
+const J2000 = Date.UTC(2000,0,1,12), T0 = Date.now(), D0 = (T0 - J2000)/86400000;
+const DEG = Math.PI/180, OBLIQ = 23.44*DEG, LON_HELLAS = 23.7;
+const lerp = (a,b,k)=> a + (b-a)*k;
+const wrapPi = x => x - TAU*Math.floor((x+Math.PI)/TAU);
+
+/* ---------- Renderer, scena, camera ---------- */
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.xr.enabled = true;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x08070c);
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.01, 400);
+const dolly = new THREE.Group(); dolly.add(camera); scene.add(dolly);
+const HOME = new THREE.Vector3(0, 13, 29);
+camera.position.copy(HOME);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = .08;
+controls.minDistance = .6; controls.maxDistance = 150;
+controls.addEventListener('start',()=>{ zoomGoal=null; });
+
+const ambient = new THREE.AmbientLight(0x3a2f3a, .55); scene.add(ambient);
+const fireLight = new THREE.PointLight(0xffa25a, 1.7, 0); scene.add(fireLight);
+const sunLight = new THREE.PointLight(0xfff0cc, 1.0, 0); scene.add(sunLight);
+
+/* ---------- Texture procedurali ---------- */
+function rng(seed){ let s = seed % 2147483647; return ()=> (s = s*16807 % 2147483647) / 2147483647; }
+function tex(base, colors, n, size, seed, bands){
+  const c = document.createElement('canvas'); c.width=256; c.height=128; const g=c.getContext('2d');
+  g.fillStyle=base; g.fillRect(0,0,256,128); const r=rng(seed);
+  if(bands){ for(let y=0;y<128;y+=3+r()*7){ g.globalAlpha=.25+r()*.35; g.fillStyle=colors[(y|0)%colors.length]; g.fillRect(0,y,256,2+r()*6);} }
+  for(let i=0;i<n;i++){ g.globalAlpha=.35+r()*.4; g.fillStyle=colors[i%colors.length]; g.beginPath();
+    const rx=3+r()*size; g.ellipse(r()*256, 14+r()*100, rx, rx*(.35+r()*.6), r()*3, 0, TAU); g.fill(); }
+  const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+}
+function glowTex(stops){
+  const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
+  const gr=g.createRadialGradient(64,64,0,64,64,64); stops.forEach(([o,col])=>gr.addColorStop(o,col));
+  g.fillStyle=gr; g.fillRect(0,0,128,128); return new THREE.CanvasTexture(c);
+}
+
+/* ---------- Fuoco centrale: il focolare (ἑστία) ---------- */
+const fireUniforms = {t:{value:0}, uPx:{value:800}, uFade:{value:1}};
+const hearth = new THREE.Group(); scene.add(hearth);
+function seeds(n, seed){ const r=rng(seed), a=new Float32Array(n*4); for(let i=0;i<n*4;i++) a[i]=r(); const g=new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3),3)); g.setAttribute('seed', new THREE.BufferAttribute(a,4)); return g; }
+// Fiamme: particelle che nascono sulle braci, salgono, si stringono verso l'asse e cambiano colore
+const flameMat = new THREE.ShaderMaterial({uniforms:fireUniforms, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec4 seed; uniform float t; uniform float uPx; uniform float uFade; varying float vLife;
+    void main(){
+      float life = 1.1 + seed.w*1.1;
+      float age = fract(t/life + seed.x);
+      float a = seed.y*6.2831853, r0 = sqrt(seed.z)*.95;
+      float tongue = .75 + .45*sin(a*3. + t*2.3)*sin(a*5. - t*3.7) + .25*sin(t*6.1 + seed.y*40.);
+      float h = (age*2.6 + age*age*.9) * tongue;
+      float shrink = pow(1. - age, 1.35);
+      vec3 p = vec3(cos(a)*r0*shrink, -.62 + h, sin(a)*r0*shrink);
+      float k = age*(.15 + .25*age);
+      p.x += (sin(t*3.3 + seed.y*21. + h*2.6) + .5*sin(t*7.1 + h*5.))*k;
+      p.z += (cos(t*2.9 + seed.z*17. + h*2.3) + .5*cos(t*6.3 + h*4.6))*k;
+      vec4 mv = modelViewMatrix*vec4(p,1.);
+      gl_Position = projectionMatrix*mv;
+      float size = (.55 + seed.w*.7) * (1. - .55*age);
+      gl_PointSize = max(1.5*uFade, size*uFade*uPx/max(.05,-mv.z));
+      vLife = age;
+    }`,
+  fragmentShader:`varying float vLife;
+    void main(){
+      vec2 uv = gl_PointCoord*2. - 1.; float d = dot(uv,uv); if(d>1.) discard;
+      float soft = pow(1. - d, 1.8);
+      vec3 c1 = vec3(1., .96, .78), c2 = vec3(1., .56, .14), c3 = vec3(.62, .1, .02);
+      vec3 col = vLife < .28 ? mix(c1, c2, vLife/.28) : mix(c2, c3, (vLife-.28)/.72);
+      float a = soft * smoothstep(0., .06, vLife) * (1. - smoothstep(.5, 1., vLife));
+      gl_FragColor = vec4(col, a*.24);
+    }`});
+const flames = new THREE.Points(seeds(2200, 41), flameMat); flames.frustumCulled=false; hearth.add(flames);
+// Scintille: poche, veloci, salgono a spirale e si spengono
+const sparkMat = new THREE.ShaderMaterial({uniforms:fireUniforms, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec4 seed; uniform float t; uniform float uPx; uniform float uFade; varying float vLife; varying float vF;
+    void main(){
+      float life = 2. + seed.w*2.5;
+      float age = fract(t/life + seed.x);
+      float a = seed.y*6.2831853 + age*2.5*(seed.z-.5);
+      float out_ = (.2 + seed.z*.9)*age*2.2;
+      vec3 p = vec3(cos(a)*(sqrt(seed.z)*.8 + out_), -.6 + age*(2.4 + seed.w*3.), sin(a)*(sqrt(seed.z)*.8 + out_));
+      p.x += sin(t*5. + seed.y*30.)*.12*age; p.z += cos(t*4.3 + seed.z*30.)*.12*age;
+      vec4 mv = modelViewMatrix*vec4(p,1.);
+      gl_Position = projectionMatrix*mv;
+      gl_PointSize = max(1.2*uFade, .07*uFade*uPx/max(.05,-mv.z));
+      vLife = age; vF = .6 + .4*sin(t*25. + seed.y*90.);
+    }`,
+  fragmentShader:`varying float vLife; varying float vF;
+    void main(){ vec2 uv = gl_PointCoord*2. - 1.; float d = dot(uv,uv); if(d>1.) discard;
+      float a = (1. - d) * (1. - smoothstep(.4, 1., vLife)) * smoothstep(0., .05, vLife) * vF;
+      gl_FragColor = vec4(mix(vec3(1., .85, .5), vec3(1., .4, .08), vLife), a); }`});
+const sparks = new THREE.Points(seeds(160, 77), sparkMat); sparks.frustumCulled=false; hearth.add(sparks);
+// Braci nel bacile
+const coals = new THREE.Mesh(new THREE.CircleGeometry(1.02, 48), new THREE.ShaderMaterial({uniforms:fireUniforms,
+  vertexShader:`varying vec2 vU; void main(){ vU=position.xy; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader:`uniform float t; varying vec2 vU;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7)))*43758.5453); }
+    float vn(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+      return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+    void main(){ vec2 p = vU*6.;
+      float cells = vn(p) * .65 + vn(p*2.3 + 7.) * .35;
+      float pulse = .55 + .45*sin(t*2.2 + vn(p*.7)*9.);
+      float heat = smoothstep(.35, .85, cells) * pulse;
+      vec3 c = mix(vec3(.08, .02, .01), vec3(.85, .16, .03), heat); c = mix(c, vec3(1., .62, .2), pow(heat, 3.));
+      float edge = 1. - smoothstep(.8, 1.02, length(vU));
+      gl_FragColor = vec4(c*(.4 + .6*edge), 1.); }`}));
+coals.rotation.x = -Math.PI/2; coals.position.y = -.62; hearth.add(coals);
+// Il braciere di bronzo
+const profile = [[0,-1.42],[.5,-1.42],[.52,-1.36],[.24,-1.28],[.2,-1.08],[.36,-1],[.74,-.88],[1,-.72],[1.13,-.56],[1.2,-.5],[1.17,-.46],[1.08,-.52],[.9,-.66],[.5,-.78],[0,-.8]].map(([x,y])=>new THREE.Vector2(x,y));
+const bowl = new THREE.Mesh(new THREE.LatheGeometry(profile, 64), new THREE.MeshStandardMaterial({color:0x8a5428, metalness:.75, roughness:.42, side:THREE.DoubleSide, emissive:0x2a0c02}));
+hearth.add(bowl);
+const fireHit = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 8), new THREE.MeshBasicMaterial());
+fireHit.visible = false; fireHit.position.y = .3; hearth.add(fireHit);
+byId.fire.mesh = fireHit; byId.fire.labelLift = 2.9;
+const fireMesh = fireHit;
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,'rgba(255,170,90,.75)'],[.25,'rgba(255,110,40,.28)'],[1,'rgba(255,80,20,0)']]), blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
+glow.scale.setScalar(8); glow.position.y = .5; scene.add(glow);
+fireLight.position.y = .5;
+const _v2 = new THREE.Vector2();
+function updateFire(time){
+  const presenting = renderer.xr.isPresenting;
+  const hpx = renderer.getDrawingBufferSize(_v2).y || innerHeight;
+  const fov = presenting ? 95 : camera.fov;
+  fireUniforms.uPx.value = hpx / (2*Math.tan(fov*Math.PI/360)) / (dolly.scale.x || 1);
+  const fl = Math.sin(time*13.1)*Math.sin(time*7.3)*.5 + Math.sin(time*23.7)*.2 + Math.sin(time*3.1)*.3;
+  fireLight.intensity = 1.7 + fl*.28;
+  glow.material.opacity = .85 + fl*.12;
+  glow.scale.setScalar(8 + fl*.5);
+}
+
+/* ---------- Fuoco esterno (Olimpo) ---------- */
+const outerUniforms = {t:{value:0}, uFade:{value:1}};
+const outerMesh = new THREE.Mesh(new THREE.SphereGeometry(byId.outer.r, 64, 32), new THREE.ShaderMaterial({uniforms:outerUniforms,
+  side:THREE.BackSide, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+  vertexShader:`varying vec3 vD; void main(){ vD=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader:`uniform float t; uniform float uFade; varying vec3 vD;
+    void main(){ vec3 p=vD*4.; float f=sin(p.x*2.3+t*.4)*sin(p.y*3.1-t*.3)*sin(p.z*2.7+t*.25)*.5+.5;
+      f+=.35*(sin(p.x*7.+p.z*5.-t*.6)*.5+.5);
+      float a=.035+.11*pow(f/1.35,2.);
+      gl_FragColor=vec4(vec3(1.,.42,.12)*a*uFade,1.); }`}));
+scene.add(outerMesh); byId.outer.mesh = outerMesh; outerMesh.userData.body = byId.outer;
+
+/* ---------- Stelle fisse ---------- */
+function dotTex(){ return glowTex([[0,'rgba(255,255,255,1)'],[.35,'rgba(255,255,255,.6)'],[1,'rgba(255,255,255,0)']]); }
+function starField(n, px, seed, warm){
+  const r=rng(seed), pos=new Float32Array(n*3), col=new Float32Array(n*3), R=byId.stars.r;
+  for(let i=0;i<n;i++){ const u=r()*2-1, th=r()*TAU, s=Math.sqrt(1-u*u);
+    pos.set([R*s*Math.cos(th), R*u, R*s*Math.sin(th)], i*3);
+    const k=.45+r()*.55, w=r()<warm; col.set(w?[k,k*.8,k*.6]:[k*.85,k*.9,k], i*3); }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3)); g.setAttribute('color',new THREE.BufferAttribute(col,3));
+  return new THREE.Points(g, new THREE.PointsMaterial({size:px, sizeAttenuation:false, vertexColors:true, map:dotTex(), transparent:true, depthWrite:false}));
+}
+const starsGroup = new THREE.Group();
+starsGroup.add(starField(2600, 2.2, 7, .3), starField(220, 4.5, 99, .4));
+scene.add(starsGroup); byId.stars.mesh = starsGroup;
+
+/* ---------- Pianeti, Terra, orbite ---------- */
+const pickables = []; let saturnRings=null, ringMat=null;
+function mat(map, extra){ return new THREE.MeshStandardMaterial(Object.assign({map, roughness:.92, metalness:0}, extra||{})); }
+const TEX = {
+  anti: tex('#3b3245',['#584a66','#2a2232'],40,14,3),
+  moon: tex('#bdb6a6',['#8f887b','#d8d1c0'],60,10,5),
+  mercury: tex('#a8977f',['#7d6f5c','#c2b39b'],50,8,11),
+  venus: tex('#e9d7ae',['#f5e8c8','#d6be8f'],0,0,13,true),
+  mars: tex('#b44f2a',['#8c3a1d','#d07a4e'],45,12,17),
+  jupiter: tex('#d2b083',['#a8774e','#ecd8b4','#b9895e'],6,22,19,true),
+  saturn: tex('#cdb378',['#a88d57','#e3d1a0'],0,0,23,true)
+};
+let hellas, earthSphere, earthTilt, earthSpin;
+BODIES.forEach(b=>{
+  if(!b.r || b.id==='stars' || b.id==='outer') return;
+  let obj;
+  if(b.id==='earth'){
+    obj = new THREE.Group(); earthTilt = new THREE.Group(); earthSpin = new THREE.Group();
+    earthSphere = new THREE.Mesh(new THREE.SphereGeometry(b.size,48,24), mat(tex('#1d3a5a',['#5f6a3a','#857549','#3f5a35'],70,16,29)));
+    hellas = new THREE.Mesh(new THREE.SphereGeometry(.045,12,8), new THREE.MeshBasicMaterial({color:0xffd58a}));
+    const lat = 38*Math.PI/180; hellas.position.set(Math.cos(lat)*b.size, Math.sin(lat)*b.size, 0);
+    earthSpin.add(earthSphere, hellas); earthTilt.add(earthSpin); obj.add(earthTilt);
+  } else if(b.id==='sun'){
+    obj = new THREE.Mesh(new THREE.SphereGeometry(b.size,48,24), new THREE.MeshStandardMaterial({color:0xfff2d0, emissive:0xffc66e, emissiveIntensity:.85, roughness:.15, metalness:.1, transparent:true, opacity:.92}));
+    const sg = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,'rgba(255,230,170,.75)'],[.3,'rgba(255,200,120,.25)'],[1,'rgba(255,180,90,0)']]), blending:THREE.AdditiveBlending, depthWrite:false, transparent:true}));
+    sg.scale.setScalar(5); obj.add(sg); b.glow = sg;
+  } else {
+    obj = new THREE.Mesh(new THREE.SphereGeometry(b.size,40,20), mat(TEX[b.id]));
+    if(b.id==='saturn'){
+      // gli anelli compaiono solo nel cosmo reale
+      ringMat = new THREE.ShaderMaterial({uniforms:{uK:{value:0}}, transparent:true, depthWrite:false, side:THREE.DoubleSide,
+        vertexShader:`varying vec3 vP; void main(){ vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+        fragmentShader:`uniform float uK; varying vec3 vP;
+          void main(){ float r=(length(vP.xy)/${b.size.toFixed(3)}-1.25)/1.05;
+            float bands=.55+.25*sin(r*60.)+.2*sin(r*23.+1.);
+            float gap=smoothstep(.56,.6,r)*(1.-smoothstep(.62,.66,r));
+            float a=bands*(1.-gap*.85)*smoothstep(0.,.05,r)*(1.-smoothstep(.93,1.,r));
+            gl_FragColor=vec4(mix(vec3(.62,.55,.42),vec3(.9,.83,.66),bands),a*.8*uK); }`});
+      saturnRings = new THREE.Mesh(new THREE.RingGeometry(b.size*1.25, b.size*2.3, 128, 1), ringMat);
+      saturnRings.rotation.x = -Math.PI/2 + 26.7*DEG; saturnRings.visible=false; obj.add(saturnRings);
+    }
+  }
+  obj.traverse(o=>{ o.userData.body=b; if(o.isMesh && o!==saturnRings) pickables.push(o); });
+  scene.add(obj); b.mesh = obj;
+  const pts=[]; for(let i=0;i<=256;i++){ const a=i/256*TAU; pts.push(new THREE.Vector3(Math.cos(a),0,Math.sin(a))); }
+  b.orbit = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({color:0xece2cc, transparent:true, opacity:.13}));
+  b.orbit.scale.setScalar(b.r); scene.add(b.orbit);
+});
+fireMesh.userData.body = byId.fire; pickables.push(fireMesh);
+// raggio di luce dal fuoco al Sole
+const beamGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+const beam = new THREE.Line(beamGeo, new THREE.LineBasicMaterial({color:0xff9a4a, transparent:true, opacity:.22}));
+scene.add(beam);
+
+/* ---------- Etichette ---------- */
+const labels = [];
+let showLabels = true;
+function labelTex(big, small){
+  const c=document.createElement('canvas'); c.width=512; c.height=160; const g=c.getContext('2d');
+  g.textAlign='center'; g.fillStyle='#ece2cc'; g.font='64px "GFS Didot", Georgia, serif'; g.fillText(big,256,78);
+  g.fillStyle='rgba(236,226,204,.65)'; g.font='500 26px Jost, "Segoe UI", sans-serif';
+  g.fillText(small.toUpperCase().split('').join('\u200A'),256,128);
+  const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t;
+}
+function buildLabels(){
+  BODIES.forEach(b=>{
+    const tF=labelTex(b.gr, b.it), tR=labelTex(b.it, b.real.sub);
+    const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tF, transparent:true, depthWrite:false, opacity:.9}));
+    s.renderOrder=10; s.userData={body:b, tF, tR}; scene.add(s); labels.push(s);
+  });
+}
+const fontsReady = document.fonts ? Promise.race([document.fonts.ready, new Promise(r=>setTimeout(r,2500))]) : Promise.resolve();
+fontsReady.then(()=>{ (document.fonts && document.fonts.load ? Promise.all([document.fonts.load('64px "GFS Didot"'), document.fonts.load('500 26px Jost')]).catch(()=>{}) : Promise.resolve()).then(buildLabels); });
+const FIXED_LABEL = {stars:new THREE.Vector3(0,9,-28.5), outer:new THREE.Vector3(0,22,-29.5), fire:null};
+
+/* ---------- Armonia delle sfere ---------- */
+let audio=null;
+function startAudio(){
+  const AC = window.AudioContext||window.webkitAudioContext; if(!AC) return null;
+  const ctx=new AC(), master=ctx.createGain(), lp=ctx.createBiquadFilter();
+  lp.type='lowpass'; lp.frequency.value=1500; master.gain.value=0; master.connect(lp); lp.connect(ctx.destination);
+  const voices = BODIES.filter(b=>b.ratio).map(b=>{
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type = b.id==='fire' ? 'triangle' : 'sine';
+    o.frequency.value = BASE_HZ * b.ratio[0]/b.ratio[1] / (b.id==='fire'?2:1);
+    g.gain.value=0; o.connect(g); g.connect(master); o.start(); return {b,g};
+  });
+  return {ctx, master, voices, on:false};
+}
+function setHarmony(on){
+  if(!audio) audio=startAudio(); if(!audio) return;
+  const {ctx,master}=audio; audio.on=on;
+  if(on){ ctx.resume(); master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.22, ctx.currentTime, .6); }
+  else { master.gain.setTargetAtTime(0, ctx.currentTime, .3); }
+  $('#harm').setAttribute('aria-pressed', on);
+}
+
+/* ---------- Tempo ---------- */
+let days=0, playing=true;
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const speedEl=$('#speed');
+if(reduce) speedEl.value = 150;
+const speedFrom = v => .005 * Math.pow(20000, v/1000);
+let speed = speedFrom(+speedEl.value);
+const fmt = (x,d=2)=> x.toLocaleString('it-IT',{maximumFractionDigits:d, minimumFractionDigits:0});
+function showSpeed(){ $('#speedOut').textContent = speed<1 ? `${fmt(speed, speed<.1?3:2)} giorni/s` : `${fmt(speed,1)} giorni/s`; }
+speedEl.addEventListener('input',()=>{ speed=speedFrom(+speedEl.value); showSpeed(); }); showSpeed();
+$('#play').addEventListener('click',e=>{ playing=!playing; e.currentTarget.textContent = playing?'Pausa':'Riprendi'; });
+function periodText(b){
+  if(!b.period) return 'immobile';
+  if(b.period===1) return '1 giorno';
+  if(b.period<100) return `${fmt(b.period,1)} giorni`;
+  if(Math.abs(b.period-365.25)<1) return '1 anno';
+  return `${fmt(b.period/365.25,2)} anni`;
+}
+
+/* ---------- Modello mostrato: Filolao (0) ↔ oggi (1) ---------- */
+let cosmo='filolao', mp=0, K=0;               // mp avanza linearmente, K è la versione addolcita
+const vis = b => (b.real && b.real.gone) ? 1-K : 1;
+function sizeOf(b){ return b.real && b.real.sR ? lerp(b.size, b.real.sR, K) : (b.size||0); }
+const COPY = {
+  filolao:{t:'Kosmos di Filolao', s:'Il cosmo pitagorico del V secolo a.C. Dieci corpi divini attorno a un fuoco, come i dieci punti della tetractys.'},
+  real:{t:'Il Sistema solare', s:'Com’è davvero, con i pianeti dove si trovano oggi. Distanze compresse e corpi ingranditi per vederli tutti insieme.'}
+};
+let zoomGoal=null;
+function setCosmo(c){
+  if(c===cosmo) return; cosmo=c;
+  $('#mF').setAttribute('aria-pressed', c==='filolao'); $('#mR').setAttribute('aria-pressed', c==='real');
+  $('#ttl').textContent=COPY[c].t; $('#sub').textContent=COPY[c].s;
+  BODIES.forEach(b=>{ const el=$('#chip-'+b.id);
+    el.querySelector('.g').textContent = c==='real' ? b.it : b.gr;
+    el.querySelector('.i').textContent = c==='real' ? b.real.sub : b.it;
+    el.classList.toggle('gone', c==='real' && !!b.real.gone); });
+  if(selected) fillCard(selected);
+  if(!selected && mode==='outside' && !renderer.xr.isPresenting) zoomGoal = c==='real' ? 48 : 31.8;
+}
+$('#mF').addEventListener('click',()=>setCosmo('filolao'));
+$('#mR').addEventListener('click',()=>setCosmo('real'));
+
+/* ---------- Selezione e scheda ---------- */
+let selected=null, lockOn=false;
+const chips=$('#chips');
+BODIES.forEach(b=>{
+  const btn=document.createElement('button'); btn.type='button'; btn.className='chip'; btn.id='chip-'+b.id; btn.setAttribute('aria-pressed','false');
+  btn.innerHTML=`<span class="g">${b.gr}</span><span class="i">${b.it}</span>`;
+  btn.addEventListener('click',()=> select(selected===b?null:b));
+  chips.appendChild(btn);
+});
+function focusDist(b){ if(b.id==='stars') return cosmo==='real'?110:62; if(b.id==='outer') return 80; if(b.id==='fire') return 7; return sizeOf(b)*7+1.6; }
+function fillCard(b){
+  const R=b.real, isR = cosmo==='real';
+  $('#iGr').textContent = isR ? b.it : b.gr;
+  $('#iIt').textContent = isR ? `${b.gr} · secondo Filolao` : b.it;
+  $('#iEpi').textContent = isR ? (R.gone ? 'Nel cosmo reale non c’è' : R.sub) : b.epi;
+  $('#cOrdF').textContent = /°$/.test(b.ord) ? b.ord+' dal fuoco' : b.ord;
+  $('#cAroF').textContent = b.period ? 'Fuoco centrale' : '—';
+  $('#cPerF').textContent = periodText(b);
+  $('#cOrdR').textContent = R.ord; $('#cAroR').textContent = R.aro; $('#cPerR').textContent = R.per;
+  ['F','R'].forEach(x=>{ const on = (x==='R')===isR;
+    ['h','cOrd','cAro','cPer'].forEach(id=>{ const el=$('#'+id+x); el.classList.toggle('on', on && id==='h'); el.classList.toggle('off', !on && id!=='h'); }); });
+  $('#iText').textContent = isR ? R.text : b.text;
+  $('#iNote').textContent = b.note && b.note!=='—' ? `Nell’armonia delle sfere: ${b.note}` : '';
+}
+function select(b){
+  selected=b; lockOn=false; zoomGoal=null; if(b) b._arrived=false;
+  BODIES.forEach(x=> $('#chip-'+x.id).setAttribute('aria-pressed', x===b));
+  const info=$('#info');
+  if(!b){ info.hidden=true; return; }
+  fillCard(b); info.hidden=false;
+  if(mode==='earth') setMode('outside');
+  const chip=$('#chip-'+b.id); chip.scrollIntoView && chip.scrollIntoView({block:'nearest', inline:'center', behavior:reduce?'auto':'smooth'});
+}
+$('#infoClose').addEventListener('click',()=>select(null));
+$('#lbl').addEventListener('click',e=>{ showLabels=!showLabels; e.currentTarget.setAttribute('aria-pressed',showLabels); });
+$('#harm').addEventListener('click',()=> setHarmony(!(audio&&audio.on)));
+
+/* ---------- Modalità vista ---------- */
+let mode='outside', yawOff=0, pitchOff=.22;
+function setMode(m){
+  mode=m;
+  $('#view').setAttribute('aria-pressed', m==='earth');
+  $('#view').textContent = m==='earth' ? 'Vista dall’esterno' : 'Vista dall’Ellade';
+  hellas.visible = m!=='earth';
+  if(renderer.xr.isPresenting){ placeXR(); return; }
+  if(m==='earth'){
+    controls.enabled=false; camera.fov=72; yawOff=0; pitchOff=.22;
+    $('#hint').textContent='Sei in Grecia e guardi a sud, verso l’eclittica · trascina per guardarti intorno';
+    if(selected){ selected=null; select(null); }
+  } else {
+    controls.enabled=true; camera.fov=55; camera.up.set(0,1,0);
+    camera.position.copy(HOME).multiplyScalar(cosmo==='real'?1.5:1); controls.target.set(0,0,0); controls.update();
+    $('#hint').textContent='Trascina per ruotare · rotella o pizzico per lo zoom · tocca un corpo';
+  }
+  camera.updateProjectionMatrix();
+}
+$('#view').addEventListener('click',()=> setMode(mode==='earth'?'outside':'earth'));
+
+/* ---------- Puntatore: selezione e sguardo ---------- */
+const ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
+let down=null;
+canvas.addEventListener('pointerdown',e=>{ down={x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY}; });
+canvas.addEventListener('pointermove',e=>{
+  if(!down || mode!=='earth') return;
+  yawOff -= (e.clientX-down.lx)*.004; pitchOff = Math.max(-.6, Math.min(1.45, pitchOff + (e.clientY-down.ly)*.004));
+  down.lx=e.clientX; down.ly=e.clientY;
+});
+window.addEventListener('pointerup',e=>{
+  if(!down) return; const moved=Math.hypot(e.clientX-down.x, e.clientY-down.y); down=null;
+  if(moved>6 || mode==='earth' || e.target!==canvas) return;
+  ndc.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1); ray.setFromCamera(ndc,camera);
+  const hit=ray.intersectObjects(pickables,false).find(h=> vis(h.object.userData.body)>.5);
+  if(hit) select(hit.object.userData.body);
+});
+
+/* ---------- WebXR ---------- */
+const vrBtn=$('#vr');
+function noVR(){ vrBtn.disabled=true; vrBtn.textContent='VR non disponibile qui'; vrBtn.title='Apri la versione standalone dal browser del visore, servita in HTTPS'; }
+if(navigator.xr && navigator.xr.isSessionSupported){
+  navigator.xr.isSessionSupported('immersive-vr').then(ok=>{ if(ok){ vrBtn.disabled=false; vrBtn.textContent='Entra in VR'; } else noVR(); }).catch(noVR);
+} else noVR();
+let savedCam=null;
+vrBtn.addEventListener('click', async ()=>{
+  if(renderer.xr.isPresenting){ renderer.xr.getSession().end(); return; }
+  try{
+    const s = await navigator.xr.requestSession('immersive-vr',{optionalFeatures:['local-floor','bounded-floor']});
+    savedCam = {pos:camera.position.clone(), target:controls.target.clone()};
+    renderer.xr.setReferenceSpaceType('local-floor');
+    await renderer.xr.setSession(s);
+    s.addEventListener('select', ()=> setMode(mode==='earth'?'outside':'earth'));
+    s.addEventListener('squeeze', ()=> setCosmo(cosmo==='real'?'filolao':'real'));
+    s.addEventListener('end', ()=>{
+      dolly.position.set(0,0,0); dolly.quaternion.identity(); dolly.scale.setScalar(1);
+      vrBtn.textContent='Entra in VR';
+      if(savedCam){ camera.position.copy(savedCam.pos); controls.target.copy(savedCam.target); }
+      setMode(mode);
+    });
+    vrBtn.textContent='Esci dalla VR';
+    placeXR();
+  }catch(err){ vrBtn.textContent='VR non avviata'; vrBtn.title=String(err && err.message || err); }
+});
+function placeXR(){
+  if(mode==='outside'){ dolly.scale.setScalar(1); dolly.quaternion.identity(); dolly.position.set(0,-.9,15); }
+  // la vista dalla Terra viene aggiornata a ogni fotogramma
+}
+
+/* ---------- Ciclo principale ---------- */
+const V = ()=>new THREE.Vector3();
+const tmp=V(), tmp2=V(), tmp3=V(), n=V(), u=V(), f=V(), right=V(), camW=V(), ORIGIN=V(), axisW=V(), basis=new THREE.Matrix4(), qT=new THREE.Quaternion();
+const Y=new THREE.Vector3(0,1,0);
+let last=performance.now();
+function angleOf(b){ return b.period ? TAU*(days/b.period) + (b.phase||0) : 0; }
+function effSpeed(){ return (renderer.xr.isPresenting && mode==='earth') ? Math.min(speed,.01) : speed; }
+
+function frame(){
+  const now=performance.now(), dt=Math.min(.1,(now-last)/1000); last=now;
+  if(playing) days += dt*effSpeed();
+  fireUniforms.t.value = outerUniforms.t.value = now/1000; updateFire(now/1000);
+
+  // passaggio Filolao ↔ oggi (2,4 s)
+  mp = Math.max(0, Math.min(1, mp + (cosmo==='real'?1:-1)*dt/(reduce?.6:2.4)));
+  K = mp*mp*(3-2*mp);
+  const dJ = D0 + days;                                  // giorni da J2000: oggi + tempo simulato
+  const earthR = REAL.earth, aE = (earthR.L0 + 360*dJ/earthR.P)*DEG;
+  const earthRealPos = tmp3.set(Math.cos(aE)*earthR.rR, 0, -Math.sin(aE)*earthR.rR);
+  BODIES.forEach(b=>{
+    if(!b.period || !b.mesh) return;
+    const a=angleOf(b), R=b.real;
+    let x=Math.cos(a)*b.r, z=Math.sin(a)*b.r, rx=x, rz=z;
+    if(R.gone){ rx=x; rz=z; }
+    else if(b.id==='moon'){ const m=(R.L0 + 360*dJ/R.P)*DEG; rx=earthRealPos.x+Math.cos(m)*R.rR; rz=earthRealPos.z-Math.sin(m)*R.rR; }
+    else if(R.P){ const l=(R.L0 + 360*dJ/R.P)*DEG; rx=Math.cos(l)*R.rR; rz=-Math.sin(l)*R.rR; }
+    else { rx=0; rz=0; }                                 // il Sole va al centro
+    b.mesh.position.set(lerp(x,rx,K), 0, lerp(z,rz,K));
+    const sc = R.sR ? lerp(1, R.sR/b.size, K) : (R.gone ? Math.max(.001,1-K) : 1);
+    b.mesh.scale.setScalar(sc); b.mesh.visible = sc>.002;
+    if(b.id==='earth'){
+      // Filolao: l'Ellade guarda sempre fuori. Oggi: rotazione siderale vera, asse inclinato di 23,4°
+      const fil = -a, lst = (280.46061837 + 360.98564736629*dJ + LON_HELLAS)*DEG;
+      earthSpin.rotation.y = lerp(fil, fil + wrapPi(lst - fil), K);
+      earthTilt.rotation.x = -OBLIQ*K;
+    }
+    else if(b.id==='anti') b.mesh.rotation.y = -a;
+    else b.mesh.rotation.y = -a*.3;
+    // orbite
+    if(b.orbit){
+      const rr = R.gone ? b.r : (b.id==='moon' ? R.rR : (R.rR||0));
+      b.orbit.scale.setScalar(Math.max(.001, lerp(b.r, rr, K)));
+      if(b.id==='moon') b.orbit.position.set(earthRealPos.x*K, 0, earthRealPos.z*K); 
+      const fade = (b.id==='sun') ? 1-K : vis(b);
+      b.orbit.material.opacity = (selected===b ? .55 : .13) * fade;
+      b.orbit.visible = fade>.01;
+    }
+  });
+  const sun=byId.sun, sunP = sun.mesh.position; sunLight.position.copy(sunP);
+  sunLight.intensity = lerp(1.0, 2.4, K);
+  sun.mesh.material.emissiveIntensity = lerp(.85, 1.5, K); sun.mesh.material.opacity = lerp(.92, 1, K);
+  sun.glow.scale.setScalar(lerp(5, 4.2, K));
+  beamGeo.attributes.position.setXYZ(1, sunP.x, sunP.y, sunP.z); beamGeo.attributes.position.needsUpdate=true;
+  beam.material.opacity = .22*(1-K); beam.visible = K<.99;
+  fireUniforms.uFade.value = 1-K; hearth.scale.setScalar(Math.max(.001,1-K)); hearth.visible = K<.995;
+  fireLight.intensity *= (1-K); glow.material.opacity *= (1-K); glow.visible = K<.995;
+  outerUniforms.uFade.value = 1-K; outerMesh.visible = K<.995;
+  starsGroup.scale.setScalar(lerp(1, 3.6, K));
+  ambient.intensity = lerp(.55, .3, K);
+  if(saturnRings){ ringMat.uniforms.uK.value = K; saturnRings.visible = K>.01; }
+
+  // Geometria della vista dall'Ellade
+  const earth=byId.earth.mesh; earth.updateMatrixWorld(true);
+  hellas.getWorldPosition(tmp); n.copy(tmp).sub(earth.position).normalize();
+  earthTilt.getWorldQuaternion(qT); axisW.set(0,1,0).applyQuaternion(qT);
+  f.copy(axisW).negate().addScaledVector(n, axisW.dot(n)).normalize(); // verso l'equatore: si guarda a sud
+
+  if(renderer.xr.isPresenting){
+    if(mode==='earth'){
+      const s=.02; dolly.scale.setScalar(s);
+      dolly.position.copy(earth.position).addScaledVector(n, byId.earth.size);
+      right.crossVectors(n, tmp2.copy(f).negate()); // x = y × z
+      basis.makeBasis(right, n, tmp2); dolly.quaternion.setFromRotationMatrix(basis);
+    } else {
+      const src = renderer.xr.getSession().inputSources;
+      for(const is of src){ const gp=is.gamepad; if(!gp||gp.axes.length<4) continue;
+        const ax=gp.axes[2], ay=gp.axes[3]; if(Math.abs(ax)<.15 && Math.abs(ay)<.15) continue;
+        renderer.xr.getCamera(camera).getWorldDirection(tmp2); tmp2.y=0; tmp2.normalize();
+        right.crossVectors(tmp2, Y);
+        dolly.position.addScaledVector(tmp2, -ay*3*dt).addScaledVector(right, ax*3*dt);
+      }
+    }
+  } else if(mode==='earth'){
+    camera.position.copy(earth.position).addScaledVector(n, sizeOf(byId.earth)+.012);
+    camera.up.copy(n);
+    tmp2.copy(f).applyAxisAngle(n, yawOff); right.crossVectors(tmp2, n).normalize();
+    tmp2.applyAxisAngle(right, pitchOff);
+    camera.lookAt(tmp.copy(camera.position).add(tmp2));
+  } else {
+    const moving = selected && selected.mesh && selected.id!=='stars' && selected.id!=='outer';
+    const goal = moving ? selected.mesh.position : ORIGIN;
+    tmp.copy(goal).sub(controls.target);
+    const k = lockOn ? 1 : 1-Math.exp(-dt*5);
+    tmp.multiplyScalar(k); controls.target.add(tmp); camera.position.add(tmp);
+    if(!lockOn && controls.target.distanceTo(goal)<.03) lockOn=true;
+    if(selected){
+      tmp2.copy(camera.position).sub(controls.target); const d=tmp2.length(), want=focusDist(selected);
+      if(Math.abs(d-want)>.02 && !selected._arrived){ tmp2.setLength(d+(want-d)*(1-Math.exp(-dt*3))); camera.position.copy(controls.target).add(tmp2); }
+      else selected._arrived=true;
+    }
+    if(zoomGoal && !selected){
+      tmp2.copy(camera.position).sub(controls.target); const d=tmp2.length();
+      if(Math.abs(d-zoomGoal)<.05) zoomGoal=null;
+      else { tmp2.setLength(d+(zoomGoal-d)*(1-Math.exp(-dt*2.2))); camera.position.copy(controls.target).add(tmp2); }
+    }
+    controls.update();
+  }
+
+  // Etichette
+  (renderer.xr.isPresenting ? renderer.xr.getCamera(camera) : camera).getWorldPosition(camW);
+  labels.forEach(s=>{
+    const b=s.userData.body, v=vis(b); s.visible=showLabels && v>.02; if(!s.visible) return;
+    const want = K>.5 ? s.userData.tR : s.userData.tF; if(s.material.map!==want){ s.material.map=want; s.material.needsUpdate=true; }
+    let p;
+    if(FIXED_LABEL[b.id]) p=tmp3.copy(FIXED_LABEL[b.id]).multiplyScalar(b.id==='stars'?starsGroup.scale.x:1);
+    else p=b.mesh ? b.mesh.position : ORIGIN;
+    const d=camW.distanceTo(p), h=Math.max(.05, d*.03);
+    s.scale.set(h*3.2, h, 1);
+    s.position.copy(p); if(!FIXED_LABEL[b.id]) s.position.y += (b.id==='fire'?(b.labelLift*(1-K)):sizeOf(b)) + h*.55;
+    s.material.opacity = (selected && selected!==b ? .45 : .92) * v * Math.min(1, Math.abs(2*K-1)*2.5+.0);
+  });
+
+  // Armonia: ogni sfera respira al ritmo della propria orbita
+  if(audio && audio.on){
+    const t=audio.ctx.currentTime;
+    audio.voices.forEach(({b,g})=>{
+      const a=angleOf(b), base = b.id==='fire'?.05:.035;
+      let v = base*(.55+.45*Math.sin(a))*vis(b); if(selected===b) v*=3;
+      g.gain.setTargetAtTime(v, t, .12);
+    });
+  }
+  renderer.render(scene,camera);
+}
+const clockEl=$('#clock');
+const dateFmt = new Intl.DateTimeFormat('it-IT',{day:'numeric', month:'short', year:'numeric'});
+setInterval(()=>{ clockEl.textContent = `${dateFmt.format(new Date(T0 + days*86400000))} · giorno ${fmt(Math.floor(days),0)}`; },200);
+renderer.setAnimationLoop(frame);
+
+addEventListener('resize',()=>{ if(renderer.xr.isPresenting) return; camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); });
+})();
+</script>
+
+</body></html>
